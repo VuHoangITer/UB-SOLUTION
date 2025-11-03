@@ -1,0 +1,230 @@
+{% extends 'layouts/admin.html' %}
+
+{% block page_title %}<h4><i class="bi bi-box-seam"></i> {{ title }} </h4>{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <a href="{{ url_for('admin.products') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Quay lại
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            
+            <!-- ========== TAB NAVIGATION ========== -->
+            <ul class="nav nav-tabs mb-4" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button">
+                        <i class="bi bi-info-circle"></i> Thông tin cơ bản
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="technical-tab" data-bs-toggle="tab" data-bs-target="#technical" type="button">
+                        <i class="bi bi-gear"></i> Thông tin kỹ thuật
+                    </button>
+                </li>
+            </ul>
+
+            <!-- ========== TAB CONTENT ========== -->
+            <div class="tab-content">
+
+                <!-- ========== TAB 1: THÔNG TIN CƠ BẢN ========== -->
+                <div class="tab-pane fade show active" id="basic" role="tabpanel">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Tên sản phẩm *</label>
+                            {{ form.name(class="form-control", placeholder="Nhập tên sản phẩm") }}
+                            {% if form.name.errors %}
+                                <div class="text-danger small mt-1">{{ form.name.errors[0] }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Slug (URL) *</label>
+                            {{ form.slug(class="form-control", placeholder="san-pham-slug") }}
+                            {% if form.slug.errors %}
+                                <div class="text-danger small mt-1">{{ form.slug.errors[0] }}</div>
+                            {% endif %}
+                            <small class="text-muted">Tự động từ tên sản phẩm</small>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Mô tả sản phẩm</label>
+                            {{ form.description(class="form-control", rows="5", placeholder="Mô tả chi tiết sản phẩm") }}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Danh mục *</label>
+                            {{ form.category_id(class="form-select") }}
+                            {% if form.category_id.errors %}
+                                <div class="text-danger small mt-1">{{ form.category_id.errors[0] }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Giá bán (VNĐ) *</label>
+                            {{ form.price(class="form-control") }}
+                            <small class="text-muted">Để số 0 nếu muốn liên hệ</small>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Giá cũ (VNĐ)</label>
+                            {{ form.old_price(class="form-control") }}
+                            <small class="text-muted">Để trống nếu không giảm giá</small>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Hình ảnh</label>
+                            <div class="input-group">
+                                {{ form.image(class="form-control", id="image") }}
+                                {% if is_feature_enabled('media') %}
+                                <button type="button" class="btn btn-warning" onclick="openMediaPicker('image', 'imagePreview')">
+                                    <i class="bi bi-images"></i> Chọn từ thư viện
+                                </button>
+                                {% endif %}
+                            </div>
+                            <small class="text-muted">JPG, PNG, GIF (Max 16MB) Khuyến nghị: 800x530px</small>
+                            <input type="hidden" name="selected_image_path" id="selectedImagePath" value="">
+                            <div class="mt-2">
+                                <img id="imagePreview" src="" alt="Preview" class="img-thumbnail" style="max-height: 150px; display: none;">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label d-block">Tùy chọn</label>
+                            <div class="form-check">
+                                {{ form.is_featured(class="form-check-input") }}
+                                <label class="form-check-label" for="{{ form.is_featured.id }}">
+                                    Sản phẩm nổi bật
+                                </label>
+                            </div>
+                            <div class="form-check mt-2">
+                                {{ form.is_active(class="form-check-input", checked=true) }}
+                                <label class="form-check-label" for="{{ form.is_active.id }}">
+                                    Kích hoạt
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========== TAB 2: THÔNG TIN KỸ THUẬT ========== -->
+                <div class="tab-pane fade" id="technical" role="tabpanel">
+                    <div class="row g-4">
+
+                        <!-- Thành phần -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="bi bi-layers text-warning"></i> Thành phần
+                            </label>
+                            {{ form.composition(class="form-control") }}
+                            <small class="text-muted">Nhập mỗi thành phần trên 1 dòng</small>
+                        </div>
+
+                        <!-- Ứng dụng -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="bi bi-lightbulb text-warning"></i> Ứng dụng & Phạm vi sử dụng
+                            </label>
+                            {{ form.application(class="form-control") }}
+                            <small class="text-muted">Nhập mỗi ứng dụng trên 1 dòng</small>
+                        </div>
+
+                        <!-- Quy trình sản xuất -->
+                        <div class="col-12">
+                            <label class="form-label">
+                                <i class="bi bi-gear-fill text-warning"></i> Quy trình sản xuất
+                            </label>
+                            {{ form.production(class="form-control") }}
+                            <small class="text-muted">Mô tả chi tiết quy trình sản xuất</small>
+                        </div>
+
+                        <!-- Hàng 2: Hạn sử dụng, Quy cách, Tiêu chuẩn -->
+                        <div class="col-md-4">
+                            <label class="form-label">
+                                <i class="bi bi-calendar-check text-warning"></i> Hạn sử dụng
+                            </label>
+                            {{ form.expiry(class="form-control") }}
+                            <small class="text-muted">VD: 12 tháng kể từ ngày SX</small>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">
+                                <i class="bi bi-box-seam text-warning"></i> Quy cách đóng gói
+                            </label>
+                            {{ form.packaging(class="form-control", rows="3") }}
+                            <small class="text-muted">Nhập mỗi quy cách trên 1 dòng. VD:<br>Bao 25kg<br>Thùng 20kg</small>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <label class="form-label">
+                                <i class="bi bi-award-fill text-warning"></i> Tiêu chuẩn
+                            </label>
+                            {{ form.standards(class="form-control") }}
+                            <small class="text-muted">VD: TCVN 7957:2008</small>
+                        </div>
+
+                        <!-- Màu sắc -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="bi bi-palette text-warning"></i> Màu sắc có sẵn
+                            </label>
+                            {{ form.colors(class="form-control") }}
+                            <small class="text-muted">Nhập mỗi màu trên 1 dòng</small>
+                        </div>
+
+                        <!-- Thông số kỹ thuật -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="bi bi-clipboard-data text-warning"></i> Thông số kỹ thuật chi tiết
+                            </label>
+                            {{ form.technical_specs(class="form-control") }}
+                            <small class="text-muted">Định dạng: <code>Tên thông số: Giá trị</code></small>
+                            <div class="alert alert-info mt-2 py-2 small">
+                                <strong>💡 Ví dụ:</strong><br>
+                                Độ bám dính: ≥ 1.0 MPa<br>
+                                Độ mịn: ≤ 45 µm<br>
+                                pH: 6.5-8.5
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ========== SUBMIT BUTTONS ========== -->
+            <div class="mt-4 pt-3 border-top">
+                {{ form.submit(class="btn btn-warning px-5") }}
+                <a href="{{ url_for('admin.products') }}" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Auto generate slug from name
+document.querySelector('input[name="name"]').addEventListener('input', function(e) {
+    const slug = e.target.value
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    
+    document.querySelector('input[name="slug"]').value = slug;
+});
+</script>
+{% if is_feature_enabled('media') %}
+{% include 'components/media_picker.html' %}
+{% endif %}
+
+{% endblock %}

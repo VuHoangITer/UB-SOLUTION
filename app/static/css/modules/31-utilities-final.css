@@ -1,0 +1,42 @@
+/* ==================== FINAL UTILITIES ====================
+ * File: 31-utilities-final.css
+ * Auto-generated from style.css
+ * Date: 2025-11-03 13:25:07
+ * ========================================================================== */
+
+/* ==================== UTILITIES - FINAL ==================== */
+.bg-gray-dark {
+  position: relative;
+  background-image: url("../img/anhnen.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(1.3);
+  color: #000000;
+}
+
+.bg-gray-dark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(180, 190, 200, 0.3);
+  backdrop-filter: blur(1px);
+  z-index: 0;
+}
+
+.bg-gray-dark > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+
+.text-truncate-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+}
+

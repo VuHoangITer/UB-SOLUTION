@@ -1,0 +1,438 @@
+{% extends 'layouts/admin.html' %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4><i class="bi bi-newspaper"></i> {{ title }}</h4>
+    <a href="{{ url_for('admin.blogs') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Quay lại
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" id="blogForm">
+                    {{ form.hidden_tag() }}
+
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Tiêu đề bài viết *</label>
+                            {{ form.title(class="form-control", id="blogTitle", placeholder="Nhập tiêu đề bài viết") }}
+                            {% if form.title.errors %}
+                                <div class="text-danger small mt-1">{{ form.title.errors[0] }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Slug (URL) *</label>
+                            {{ form.slug(class="form-control", id="blogSlug", placeholder="tieu-de-bai-viet") }}
+                            {% if form.slug.errors %}
+                                <div class="text-danger small mt-1">{{ form.slug.errors[0] }}</div>
+                            {% endif %}
+                            <small class="text-muted">Tự động từ tiêu đề</small>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Mô tả ngắn (Excerpt)</label>
+                            {{ form.excerpt(class="form-control", id="blogExcerpt", rows="3", placeholder="Tóm tắt nội dung bài viết") }}
+                            <small class="text-muted">Tối đa 200 ký tự</small>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Nội dung bài viết *</label>
+                            {{ form.content(class="form-control", id="editor", rows="15", placeholder="Viết nội dung đầy đủ ở đây...") }}
+                            {% if form.content.errors %}
+                                <div class="text-danger small mt-1">{{ form.content.errors[0] }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Hình ảnh đại diện</label>
+                            <div class="input-group">
+                                {{ form.image(class="form-control", id="image") }}
+                                {% if is_feature_enabled('media') %}
+                                <button type="button" class="btn btn-warning" onclick="openMediaPicker('image', 'imagePreview')">
+                                    <i class="bi bi-images"></i> Chọn từ thư viện
+                                </button>
+                                {% endif %}
+                            </div>
+                            <small class="text-muted">Khuyến nghị: 800x500px (Max 16MB)</small>
+
+                            <input type="hidden" name="selected_image_path" id="selectedImagePath" value="">
+
+                            <div class="mt-2">
+                                <img id="imagePreview" src="{% if blog and blog.image %}{{ blog.image }}{% endif %}" alt="Preview" class="img-thumbnail" style="max-height: 150px; {% if not blog or not blog.image %}display: none;{% endif %}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Tác giả</label>
+                            {{ form.author(class="form-control", placeholder="Tên tác giả") }}
+                            <small class="text-muted">Để trống sẽ lấy tên user hiện tại</small>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                {{ form.is_featured(class="form-check-input") }}
+                                <label class="form-check-label" for="{{ form.is_featured.id }}">
+                                    <i class="bi bi-star"></i> Đánh dấu là bài viết nổi bật
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                {{ form.is_active(class="form-check-input", checked=true) }}
+                                <label class="form-check-label" for="{{ form.is_active.id }}">
+                                    Kích hoạt hiển thị
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            {{ form.submit(class="btn btn-warning px-5") }}
+                            <a href="{{ url_for('admin.blogs') }}" class="btn btn-secondary">Hủy</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if is_feature_enabled('media') %}
+{% include 'components/media_picker.html' %}
+{% endif %}
+{% endblock %}
+{% block extra_js %}
+<script>
+// Auto-generate slug from title
+document.querySelector('input[name="title"]').addEventListener('input', function(e) {
+    const slug = e.target.value
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    document.querySelector('input[name="slug"]').value = slug;
+});
+</script>
+
+<!-- ==================== CKEDITOR 5 VỚI RESIZE ẢNH BẰNG CHUỘT ==================== -->
+<script src="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.umd.js"></script>
+<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.css" />
+
+<script>
+const {
+    ClassicEditor,
+    Essentials,
+    Bold,
+    Italic,
+    Underline,
+    Strikethrough,
+    Font,
+    Paragraph,
+    Heading,
+    Link,
+    List,
+    Image,
+    ImageCaption,
+    ImageStyle,
+    ImageToolbar,
+    ImageUpload,
+    ImageResize,
+    LinkImage,
+    Table,
+    TableToolbar,
+    BlockQuote,
+    Code,
+    Alignment,
+    Undo
+} = CKEDITOR;
+
+let editorInstance;
+
+// ✅ CUSTOM UPLOAD ADAPTER CLASS
+class MyUploadAdapter {
+    constructor(loader) {
+        this.loader = loader;
+    }
+
+    upload() {
+        return this.loader.file.then(file => {
+            return new Promise((resolve, reject) => {
+                const formData = new FormData();
+                formData.append('upload', file);
+
+                const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+
+                console.log('🚀 Starting upload:', file.name);
+
+                fetch('{{ url_for("admin.ckeditor_upload_image") }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    }
+                })
+                .then(response => {
+                    console.log('📡 Response status:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('📦 Response data:', data);
+
+                    if (data.url) {
+                        console.log('✅ Upload success:', data.url);
+                        resolve({ default: data.url });
+                    } else if (data.error) {
+                        console.error('❌ Upload error:', data.error.message);
+                        reject(data.error.message);
+                    } else {
+                        console.error('❌ Unknown response format');
+                        reject('Upload thất bại');
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Network error:', error);
+                    reject('Lỗi kết nối: ' + error.message);
+                });
+            });
+        });
+    }
+
+    abort() {
+        console.log('⚠️ Upload aborted');
+    }
+}
+
+// ✅ PLUGIN ĐỂ ĐĂNG KÝ UPLOAD ADAPTER
+function MyCustomUploadAdapterPlugin(editor) {
+    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+        console.log('🔌 Creating upload adapter');
+        return new MyUploadAdapter(loader);
+    };
+}
+
+// ✅ KHỞI TẠO CKEDITOR 5
+ClassicEditor
+    .create(document.querySelector('#editor'), {
+        plugins: [
+            Essentials,
+            Bold, Italic, Underline, Strikethrough,
+            Font,
+            Paragraph, Heading,
+            Link, List,
+            Image, ImageCaption, ImageStyle, ImageToolbar, ImageUpload, ImageResize, LinkImage,
+            Table, TableToolbar,
+            BlockQuote, Code,
+            Alignment,
+            Undo,
+            MyCustomUploadAdapterPlugin
+        ],
+
+        toolbar: {
+            items: [
+                'heading', '|',
+                'bold', 'italic', 'underline', 'strikethrough', '|',
+                'fontSize', 'fontColor', 'fontBackgroundColor', '|',
+                'link', 'bulletedList', 'numberedList', '|',
+                'uploadImage', 'insertTable', 'blockQuote', 'code', '|',
+                'alignment', '|',
+                'undo', 'redo'
+            ],
+            shouldNotGroupWhenFull: true
+        },
+
+        image: {
+            toolbar: [
+                'imageStyle:inline',
+                'imageStyle:wrapText',
+                'imageStyle:breakText',
+                '|',
+                'toggleImageCaption',
+                '|',
+                'imageTextAlternative',
+                '|',
+                'linkImage'
+            ],
+            styles: [
+                'full',
+                'alignLeft',
+                'alignCenter',
+                'alignRight'
+            ],
+            upload: {
+                types: ['jpeg', 'png', 'gif', 'webp', 'jpg']
+            }
+        },
+
+        fontSize: {
+            options: [
+                'tiny',
+                'small',
+                'default',
+                'big',
+                'huge'
+            ]
+        },
+
+        alignment: {
+            options: ['left', 'center', 'right', 'justify']
+        },
+
+        table: {
+            contentToolbar: [
+                'tableColumn', 'tableRow', 'mergeTableCells',
+                'tableProperties', 'tableCellProperties'
+            ]
+        },
+
+        link: {
+            decorators: {
+                openInNewTab: {
+                    mode: 'manual',
+                    label: 'Mở tab mới',
+                    attributes: {
+                        target: '_blank',
+                        rel: 'noopener noreferrer'
+                    }
+                }
+            }
+        }
+    })
+    .then(editor => {
+        console.log('✅ CKEditor 5 với ImageResize khởi tạo thành công!');
+        editorInstance = editor;
+        const textarea = document.querySelector('#editor');
+        textarea.removeAttribute('required');
+
+        // Submit form handler
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const content = editorInstance.getData().trim();
+            textarea.value = content;
+            if (!content) {
+                e.preventDefault();
+                alert('Vui lòng nhập nội dung bài viết');
+                editorInstance.focus();
+                return false;
+            }
+        });
+    })
+    .catch(error => {
+        console.error('❌ Lỗi khởi tạo CKEditor:', error);
+        alert('Không thể khởi tạo trình soạn thảo. Vui lòng refresh trang.');
+    });
+</script>
+
+<!-- ✅ CSS ĐỂ ẢNH RESPONSIVE -->
+<style>
+.ck-content img {
+    max-width: 100%;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.ck-content img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.ck-content figure.image {
+    margin: 1em 0;
+}
+
+.ck-content figure.image img {
+    margin: 0 auto;
+}
+
+.ck-content figure.image figcaption {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    padding: 0.5em;
+    background: #f5f5f5;
+    margin-top: 0.5em;
+}
+
+.ck-content .image-style-align-left,
+.ck-content .image-style-side {
+    float: left;
+    margin-right: 1.5em;
+    max-width: 50%;
+}
+
+.ck-content .image-style-align-right {
+    float: right;
+    margin-left: 1.5em;
+    max-width: 50%;
+}
+
+.ck-content .image-style-align-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+
+<!-- ✅ THÊM CSS ĐỂ ẢNH RESPONSIVE TRÊN FRONTEND -->
+<style>
+/* CSS cho ảnh trong CKEditor */
+.ck-content img {
+    max-width: 100%;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.ck-content img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* CSS cho figure (ảnh có caption) */
+.ck-content figure.image {
+    margin: 1em 0;
+}
+
+.ck-content figure.image img {
+    margin: 0 auto;
+}
+
+.ck-content figure.image figcaption {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    padding: 0.5em;
+    background: #f5f5f5;
+    margin-top: 0.5em;
+}
+
+/* CSS cho ảnh căn trái/phải */
+.ck-content .image-style-align-left,
+.ck-content .image-style-side {
+    float: left;
+    margin-right: 1.5em;
+    max-width: 50%;
+}
+
+.ck-content .image-style-align-right {
+    float: right;
+    margin-left: 1.5em;
+    max-width: 50%;
+}
+
+.ck-content .image-style-align-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+
+{% endblock %}

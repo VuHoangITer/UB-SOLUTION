@@ -1,0 +1,195 @@
+/* ==================== RETURN & REFUND POLICY STYLES ====================
+ * File: 26-policy-page.css
+ * Auto-generated from style.css
+ * Date: 2025-11-03 13:25:07
+ * ========================================================================== */
+
+/* ==================== RETURN & REFUND POLICY STYLES ==================== */
+/* ==================== CHÍNH SÁCH VN - POLICY PAGE STYLES ====================
+ * Namespace: .chinh-sach-vn
+ * Date: 2025-10-27
+ * ========================================================================== */
+
+.chinh-sach-vn {
+  /* Variables */
+  --policy-primary: #3c88d6;
+  --policy-text: #2c3e50;
+  --policy-border: #e8e8e8;
+  --policy-bg-light: #f4f9fd;
+  --policy-shadow: 0 2px 8px rgba(60, 136, 214, 0.08);
+}
+
+/* Sidebar Navigation */
+.chinh-sach-vn .list-group {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--policy-shadow);
+}
+
+.chinh-sach-vn .list-group-item {
+  border: none;
+  border-bottom: 1px solid var(--policy-border);
+  padding: 1rem 1.25rem;
+  transition: all 0.3s ease;
+  color: var(--policy-text);
+  font-weight: 500;
+}
+
+.chinh-sach-vn .list-group-item:last-child {
+  border-bottom: none;
+}
+
+.chinh-sach-vn .list-group-item:hover {
+  background-color: var(--policy-bg-light);
+  padding-left: 1.5rem;
+  color: var(--policy-primary);
+}
+
+.chinh-sach-vn .list-group-item.active {
+  background: linear-gradient(135deg, var(--policy-primary) 0%, #63a4e5 100%);
+  color: #000;
+  font-weight: 600;
+  border-left: 4px solid #3c88d6;
+}
+
+/* Policy Content Card */
+.chinh-sach-vn .card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--policy-shadow);
+  border: 1px solid var(--policy-border);
+}
+
+.chinh-sach-vn .card-header {
+  background: linear-gradient(
+    135deg,
+    var(--policy-primary) 0%,
+    #63a4e5 100%
+  ) !important;
+  padding: 1.5rem;
+  border-bottom: none;
+}
+
+.chinh-sach-vn .card-header h3 {
+  color: #000 !important;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.chinh-sach-vn .card-body {
+  padding: 2rem;
+  line-height: 1.8;
+  color: var(--policy-text);
+}
+
+/* Typography trong content */
+.chinh-sach-vn .card-body h1,
+.chinh-sach-vn .card-body h2,
+.chinh-sach-vn .card-body h3,
+.chinh-sach-vn .card-body h4 {
+  color: var(--policy-text);
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.chinh-sach-vn .card-body h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--policy-primary);
+}
+
+.chinh-sach-vn .card-body h3 {
+  font-size: 1.25rem;
+}
+
+.chinh-sach-vn .card-body p {
+  margin-bottom: 1rem;
+}
+
+.chinh-sach-vn .card-body ul,
+.chinh-sach-vn .card-body ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.chinh-sach-vn .card-body li {
+  margin-bottom: 0.5rem;
+}
+
+.chinh-sach-vn .card-body strong {
+  color: var(--policy-text);
+  font-weight: 600;
+}
+
+/* Contact Box */
+.chinh-sach-vn .bg-light {
+  background-color: var(--policy-bg-light) !important;
+  border-radius: 12px;
+  border: 1px solid var(--policy-border);
+}
+
+.chinh-sach-vn .bg-light h5 {
+  color: var(--policy-text);
+  font-weight: 700;
+}
+
+.chinh-sach-vn .btn-warning {
+  background: linear-gradient(135deg, var(--policy-primary) 0%, #63a4e5 100%);
+  border: none;
+  color: #000;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(60, 136, 214, 0.3);
+}
+
+.chinh-sach-vn .btn-warning:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(60, 136, 214, 0.4);
+}
+
+.chinh-sach-vn .btn-outline-warning {
+  border: 2px solid var(--policy-primary);
+  color: var(--policy-text);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.chinh-sach-vn .btn-outline-warning:hover {
+  background: var(--policy-primary);
+  color: #000;
+  transform: translateY(-2px);
+}
+
+/* Empty State */
+.chinh-sach-vn .text-center .bi-file-earmark-text {
+  color: #cbd5e0;
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+  .chinh-sach-vn .list-group {
+    position: static !important;
+    margin-bottom: 1.5rem;
+  }
+
+  .chinh-sach-vn .card-body {
+    padding: 1.5rem;
+  }
+
+  .chinh-sach-vn .card-header h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+

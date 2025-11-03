@@ -1,0 +1,87 @@
+<!-- ==================== NEWSLETTER ==================== -->
+<section class="newsletter-section py-5" id="newsletter-section">
+  <div class="container">
+    <div class="newsletter-wrapper">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+          <div class="newsletter-content">
+            <span class="newsletter-badge">
+              <i class="bi bi-envelope-heart"></i> MIỄN PHÍ
+            </span>
+            <h2 class="newsletter-title">
+              Nhận Báo Giá & Ưu Đãi <span class="highlight">Đặc Biệt</span>
+            </h2>
+            <p class="newsletter-desc">
+              Đăng ký để nhận bảng giá cát sấy mới nhất, thông tin khuyến mãi,
+              và các chương trình ưu đãi đặc biệt dành riêng cho khách hàng thân thiết!
+            </p>
+            <ul class="newsletter-benefits">
+              <li><i class="bi bi-check-circle-fill"></i> Bảng giá cập nhật hàng tuần</li>
+              <li><i class="bi bi-check-circle-fill"></i> Ưu đãi giảm giá đơn hàng lớn</li>
+              <li><i class="bi bi-check-circle-fill"></i> Tư vấn kỹ thuật miễn phí</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="newsletter-form-wrapper">
+            <form id="newsletterForm" class="newsletter-form" novalidate>
+              <div class="form-group-inline">
+                <input
+                  type="email"
+                  id="newsletter-email"
+                  name="email"
+                  class="newsletter-input"
+                  placeholder="Nhập email của bạn..."
+                  required
+                  autocomplete="email"
+                >
+                <button type="submit" class="newsletter-btn" id="newsletter-submit-btn">
+                  <span class="btn-text">Đăng Ký</span>
+                  <span class="btn-icon"><i class="bi bi-send-fill"></i></span>
+                  <span class="btn-spinner d-none">
+                    <span class="spinner-border spinner-border-sm" role="status"></span>
+                  </span>
+                </button>
+              </div>
+
+              <div class="form-check mt-3">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="newsletter-consent"
+                  name="consent"
+                  required
+                >
+                <label class="form-check-label" for="newsletter-consent">
+                  Tôi đồng ý nhận email báo giá và khuyến mãi từ UB SOLUTION
+                </label>
+              </div>
+
+              <div class="newsletter-message" id="newsletterMessage"></div>
+            </form>
+
+            <!-- Trust indicators -->
+            <div class="newsletter-trust">
+              <div class="trust-item">
+                <i class="bi bi-shield-check"></i>
+                <span>Không spam</span>
+              </div>
+              <div class="trust-item">
+                <i class="bi bi-envelope-check"></i>
+                <span>Hủy bất cứ lúc nào</span>
+              </div>
+              <div class="trust-item">
+                <i class="bi bi-lock"></i>
+                <span>Bảo mật thông tin</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animated Background -->
+  <div class="newsletter-bg-pattern"></div>
+</section>
