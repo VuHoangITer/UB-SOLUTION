@@ -1,7 +1,7 @@
 /* ==================== NAVIGATION BAR STYLES ====================
  * File: 08-navbar.css
  * Auto-generated from style.css
- * Date: 2025-11-03 15:10:39
+ * Date: 2025-11-03 15:33:39
  * ========================================================================== */
 
 /* ==================== NAVBAR ==================== */
@@ -10,13 +10,13 @@
   overflow: visible;
   z-index: var(--z-sticky);
   position: fixed;
-  top: 60px;
+  top: 60px;  /* ← GIỮ NGUYÊN */
   left: 50%;
   transform: translateX(-50%);
   width: 95%;
   max-width: 1320px;
   border-radius: 50px;
-  background: rgba(255, 255, 255, 0);
+  background: rgba(255, 255, 255, 0);  /* ← GIỮ NGUYÊN - trong suốt */
   backdrop-filter: blur(0px);
   box-shadow: none;
   transition: all var(--transition-slow);

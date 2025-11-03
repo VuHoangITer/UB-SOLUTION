@@ -1,13 +1,13 @@
 /* ==================== BANNER CAROUSEL STYLES ====================
  * File: 10-banner.css
  * Auto-generated from style.css
- * Date: 2025-11-03 15:10:39
+ * Date: 2025-11-03 15:33:39
  * ========================================================================== */
 
 /* ==================== BANNER CAROUSEL ==================== */
 .carousel-item {
-  min-height: 602px !important;
-  height: 602px !important;
+  min-height: 100vh !important;  /* ← SỬA: 602px → 100vh */
+  height: 100vh !important;      /* ← SỬA: 602px → 100vh */
   position: relative;
   display: flex;
   align-items: center;
@@ -15,12 +15,12 @@
 }
 
 .carousel-item img {
-  height: 602px !important;
+  height: 100vh !important;  /* ← SỬA: 602px → 100vh */
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  object-fit: cover;
+  object-fit: cover;  /* ← THÊM dòng này */
 }
 
 /* Banner Image Loading */
@@ -255,8 +255,8 @@
 @media (max-width: 768px) {
   .carousel-item,
   .carousel-item img {
-    height: 440px;
-    min-height: 400px;
+    height: 100vh !important;
+    min-height: 100vh !important;
   }
 
   .carousel-caption {
@@ -294,8 +294,8 @@
 @media (max-width: 576px) {
   .carousel-item,
   .carousel-item img {
-    height: 520px;
-    min-height: 350px;
+    height: 100vh !important;
+    min-height: 100vh !important;
   }
 
   .carousel-caption h1,

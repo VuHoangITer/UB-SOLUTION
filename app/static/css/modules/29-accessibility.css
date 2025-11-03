@@ -1,7 +1,7 @@
 /* ==================== ACCESSIBILITY FEATURES ====================
  * File: 29-accessibility.css
  * Auto-generated from style.css
- * Date: 2025-11-03 15:10:39
+ * Date: 2025-11-03 15:33:39
  * ========================================================================== */
 
 /* ==================== ACCESSIBILITY ==================== */
@@ -3865,4 +3865,28 @@ html {
     transform: none;
   }
 }
+/* ==================== HOME PAGE SPECIFIC ==================== */
+/* Bỏ margin-top cho carousel ở trang chủ */
+body.home .page-header {
+  margin-top: 0 !important;
+}
 
+/* Đảm bảo carousel full screen */
+#carouselExampleIndicators {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Navbar text màu trắng khi ở trên banner */
+.navbar:not(.navbar-scrolled) .nav-link {
+  color: black !important;
+}
+
+.navbar:not(.navbar-scrolled) .navbar-brand img {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) brightness(1.2);
+}
+
+.navbar:not(.navbar-scrolled) .btn-dark {
+  background: rgba(60, 136, 214, 0.9) !important;
+  backdrop-filter: blur(10px);
+}
