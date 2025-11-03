@@ -1,12 +1,13 @@
 /* ==================== BANNER CAROUSEL STYLES ====================
  * File: 10-banner.css
  * Auto-generated from style.css
- * Date: 2025-11-03 13:25:07
+ * Date: 2025-11-03 15:10:39
  * ========================================================================== */
 
 /* ==================== BANNER CAROUSEL ==================== */
 .carousel-item {
-  min-height: 602px;
+  min-height: 602px !important;
+  height: 602px !important;
   position: relative;
   display: flex;
   align-items: center;
@@ -14,12 +15,12 @@
 }
 
 .carousel-item img {
-  height: 602px;
+  height: 602px !important;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  object-fit: cover;
 }
 
 /* Banner Image Loading */
